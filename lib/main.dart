@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gaming_tracker/pages/CalendarPage.dart';
+import 'package:gaming_tracker/pages/LandingPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: GoogleFonts.sourceCodeProTextTheme(),
       ),
-      home: const CalendarPage(),
+      home: LandingPage(),
     );
   }
 }
