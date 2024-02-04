@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaming_tracker/pages/AddGamePage.dart';
 
 class GamesPage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _GamesPageState extends State<GamesPage> {
           const SizedBox(
             height: 15,
           ),
-          Text(
+          const Text(
             "No Games Here!",
             style: TextStyle(fontSize: 18, color: Colors.white),
           ),
@@ -25,8 +26,11 @@ class _GamesPageState extends State<GamesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        onPressed: () {},
-        child: Icon(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddGamePage()));
+        },
+        child: const Icon(
           Icons.add_outlined,
         ),
       ),

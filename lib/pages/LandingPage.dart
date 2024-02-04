@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaming_tracker/pages/AddGamePage.dart';
 import 'package:gaming_tracker/pages/CalendarPage.dart';
 import 'package:gaming_tracker/pages/GamesPage.dart';
 import 'package:gaming_tracker/pages/StatisticsPage.dart';

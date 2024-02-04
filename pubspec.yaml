@@ -18,6 +18,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   calendar_date_picker2: ^0.5.3
   google_fonts: ^6.1.0
+  gap: ^3.0.1
+  fluttertoast: ^8.2.4
 
 dev_dependencies:
   flutter_test:
