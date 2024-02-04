@@ -1,16 +1,7 @@
 # gaming_tracker
 
-A new Flutter project.
+A flutter app to track your gaming habits, time spent on each game in a week, and performance modes utilized.
+> [!NOTE]  
+> This is a very small-scale project and is very early in development. Check back for updates and eventual beta releases!
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="315" alt="image" src="https://github.com/nikhil-RGB/gaming-tracker/assets/68727041/82b952d4-abb5-4e34-8952-93398ad6c72d">
