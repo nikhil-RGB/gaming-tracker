@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+
+XFile? image;
 
 class AddGamePage extends StatefulWidget {
   @override
@@ -12,7 +17,6 @@ class _AddGamePageState extends State<AddGamePage> {
   final TextEditingController _description = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -47,7 +51,9 @@ class _AddGamePageState extends State<AddGamePage> {
             buildDescriptionField(),
             Gap(10),
             buildImageContainer(),
-            Gap(30),
+            const Gap(5),
+            _clickToLoad(),
+            const Gap(5),
             buildSubmitButton(),
           ],
         ),
@@ -55,6 +61,26 @@ class _AddGamePageState extends State<AddGamePage> {
     );
   }
 
+  //Click here to load image text
+  Widget _clickToLoad() {
+    return GestureDetector(
+      //on user tap.
+      onTap: () {
+        setState(() {});
+      },
+      child: const Center(
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            "Click here to load selected image",
+            style: TextStyle(fontSize: 14, color: Colors.blue),
+          ),
+        ),
+      ),
+    );
+  }
+
+  //builds the name field
   Widget buildNameField() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -70,6 +96,9 @@ class _AddGamePageState extends State<AddGamePage> {
             ),
           ),
           TextField(
+            onChanged: (value) {
+              setState(() {});
+            },
             controller: _name,
             maxLength: 40,
             style: const TextStyle(color: Colors.white),
@@ -82,6 +111,7 @@ class _AddGamePageState extends State<AddGamePage> {
     );
   }
 
+  //Builds the description field
   Widget buildDescriptionField() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -97,6 +127,9 @@ class _AddGamePageState extends State<AddGamePage> {
             ),
           ),
           TextField(
+            onChanged: (value) {
+              setState(() {});
+            },
             controller: _description,
             maxLines: 3,
             maxLength: 90,
@@ -114,36 +147,50 @@ class _AddGamePageState extends State<AddGamePage> {
   Widget buildImageContainer() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 57, 54, 54),
-          border: Border.all(
-            color: Colors.redAccent,
-            width: 3.0,
-          ),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.file_upload_outlined),
-                SizedBox(height: 20.0),
-                Text(
-                  "Upload image from gallery",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                Gap(15),
-                Text(
-                  "Supported formats: .jpg .png",
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                )
-              ],
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            image = null;
+            _pickImage();
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 57, 54, 54),
+            border: Border.all(
+              color: Colors.redAccent,
+              width: 3.0,
             ),
+            borderRadius: BorderRadius.circular(10.0),
           ),
+          child: (image != null)
+              ? SizedBox(
+                  width: 460,
+                  height: 270,
+                  child: Image.file(File(image!.path)),
+                )
+              : const Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.file_upload_outlined),
+                        SizedBox(height: 20.0),
+                        Text(
+                          "Upload image from gallery",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        Gap(15),
+                        Text(
+                          "Supported formats: .jpg .png",
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
         ),
       ),
     );
@@ -161,18 +208,20 @@ class _AddGamePageState extends State<AddGamePage> {
             ),
             backgroundColor: Colors.redAccent,
           ),
-          onPressed: () {
-            save();
-            Fluttertoast.showToast(
-                msg: "Entry Saved!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Color.fromARGB(255, 41, 40, 40),
-                textColor: Colors.white,
-                fontSize: 16.0);
-            Navigator.of(context).pop();
-          },
+          onPressed: isDataValid()
+              ? () {
+                  save();
+                  Fluttertoast.showToast(
+                      msg: "Entry Saved!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Color.fromARGB(255, 41, 40, 40),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  Navigator.of(context).pop();
+                }
+              : null,
           child: const Padding(
             padding: EdgeInsets.all(12.0),
             child: Center(
@@ -188,6 +237,44 @@ class _AddGamePageState extends State<AddGamePage> {
     );
   }
 
+  //Checks whether the inputted data is valid or not
+  bool isDataValid() {
+    return !((_name.text.replaceAll(" ", "")).isEmpty ||
+        _description.text.replaceAll(" ", "").isEmpty ||
+        image == null);
+  }
+
   //TO-DO:Implement data persistence via hive boxes
-  void save() {}
+  void save() {
+    image = null;
+  }
+
+  //Pick image from gallery
+  Future _pickImage() async {
+    image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  }
+
+  //retrieves an image which might have been lost before
+  Future<void> getLostData() async {
+    final ImagePicker picker = ImagePicker();
+    final LostDataResponse response = await picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    final List<XFile>? files = response.files;
+    try {
+      if (files != null) {
+        image = files[0];
+      }
+    } catch (response) {
+      Fluttertoast.showToast(
+          msg: "An error ocurred!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 41, 40, 40),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
 }
