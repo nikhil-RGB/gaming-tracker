@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "cmake.sourceDirectory": "C:/PROJECTS/personal/gaming_tracker/linux"
+    "cmake.sourceDirectory": "C:/PROJECTS/personal/gaming_tracker/linux",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

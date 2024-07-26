@@ -244,7 +244,7 @@ class _AddGamePageState extends State<AddGamePage> {
         image == null);
   }
 
-  //TO-DO:Implement data persistence via hive boxes
+  //TO-DO:Implement data persistence via hive boxes or Json Serialization
   void save() {
     image = null;
   }
