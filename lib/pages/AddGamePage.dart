@@ -256,10 +256,10 @@ class _AddGamePageState extends State<AddGamePage> {
         image_path: image!.path);
     String data = jsonEncode(model.toJson());
     File gamefile = File("${main_dir_path}/Games/${model.game_name}.txt");
-    gamefile.create().then((value) {
-      value.writeAsString(data);
-      Logger().w("$data\n${model.game_name}");
-    });
+    gamefile.createSync();
+    gamefile.writeAsStringSync(data);
+    Logger().w("$data\n${model.game_name}");
+
     image = null;
   }
 
