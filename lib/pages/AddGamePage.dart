@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gaming_tracker/main.dart';
+import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gap/gap.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 
 XFile? image;
 
@@ -206,7 +210,7 @@ class _AddGamePageState extends State<AddGamePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: isDataValid() ? Colors.redAccent : Colors.grey,
           ),
           onPressed: isDataValid()
               ? () {
@@ -244,8 +248,18 @@ class _AddGamePageState extends State<AddGamePage> {
         image == null);
   }
 
-  //TO-DO:Implement data persistence via hive boxes
+  //TO-DO:Implement data persistence via hive boxes or Json Serialization
   void save() {
+    GameDataModel model = GameDataModel(
+        game_name: _name.text,
+        description: _description.text,
+        image_path: image!.path);
+    String data = jsonEncode(model.toJson());
+    File gamefile = File("${main_dir_path}/Games/${model.game_name}.txt");
+    gamefile.createSync();
+    gamefile.writeAsStringSync(data);
+    Logger().w("$data\n${model.game_name}");
+
     image = null;
   }
 
