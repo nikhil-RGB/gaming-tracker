@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:gaming_tracker/pages/DailyGamesPage.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -35,6 +36,16 @@ class _CalendarPageState extends State<CalendarPage> {
             onValueChanged: (dates) => _dates = dates,
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          DateTime obj = _dates[0]!;
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DailyGamePage(
+                    referenceDay: obj,
+                  )));
+        },
+        child: const Icon(Icons.play_arrow_outlined),
       ),
     );
   }
