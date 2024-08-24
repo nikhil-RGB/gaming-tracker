@@ -16,6 +16,7 @@ class _GamesPageState extends State<GamesPage> {
   Widget build(BuildContext context) {
     List<GameDataModel> games = getGameData();
     return Scaffold(
+      // ignore: prefer_is_empty
       body: (games.length == 0)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,8 +94,8 @@ class _GamesPageState extends State<GamesPage> {
                   size: 30,
                 ),
                 onPressed: () {
-                  File reference = File(
-                      main_dir_path + "/Games/" + gameData.game_name + ".txt");
+                  File reference =
+                      File("$main_dir_path/Games/${gameData.game_name}.txt");
                   reference
                       .deleteSync(); //throws a file system exception if it  fails.
                   setState(() {});
