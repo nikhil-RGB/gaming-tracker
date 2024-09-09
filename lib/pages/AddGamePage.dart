@@ -286,7 +286,7 @@ class _AddGamePageState extends State<AddGamePage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 41, 40, 40),
+          backgroundColor: const Color.fromARGB(255, 41, 40, 40),
           textColor: Colors.white,
           fontSize: 16.0);
     }
