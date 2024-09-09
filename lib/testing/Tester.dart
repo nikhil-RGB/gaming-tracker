@@ -23,15 +23,15 @@ class Tester {
     info_list.updateInfo();
   }
 
-  static List<GameDataModel> getGameData() {
-    Directory games_dir = Directory("$main_dir_path/Games");
-    List<FileSystemEntity> files = games_dir.listSync();
-    List<GameDataModel> gameData = [];
-    for (FileSystemEntity entity in files) {
-      File ref = File(entity.path);
-      String data = ref.readAsStringSync();
-      gameData.add(GameDataModel.fromJson(jsonDecode(data)));
-    }
-    return gameData;
-  }
+  // static List<GameDataModel> getGameData() {
+  //   Directory games_dir = Directory("$main_dir_path/Games");
+  //   List<FileSystemEntity> files = games_dir.listSync();
+  //   List<GameDataModel> gameData = [];
+  //   for (FileSystemEntity entity in files) {
+  //     File ref = File(entity.path);
+  //     String data = ref.readAsStringSync();
+  //     gameData.add(GameDataModel.fromJson(jsonDecode(data)));
+  //   }
+  //   return gameData;
+  // }
 }

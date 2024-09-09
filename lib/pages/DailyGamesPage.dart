@@ -1,8 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/DailyInfoList.dart';
+import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
+import 'package:gaming_tracker/pages/GamesPage.dart';
+import 'package:gaming_tracker/pages/SelectGamePage.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -173,14 +178,6 @@ class _DailyGamePageState extends State<DailyGamePage> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          // boxShadow: const [
-          //   BoxShadow(
-          //     color: Color(0XFFF23453),
-          //     spreadRadius: 1,
-          //     blurRadius: 4,
-          //     offset: Offset(0, 2), // changes position of shadow
-          //   ),
-          // ],
         ),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -189,7 +186,22 @@ class _DailyGamePageState extends State<DailyGamePage> {
                     side: BorderSide.none,
                     // border radius
                     borderRadius: BorderRadius.circular(50))),
-            onPressed: () {},
+            onPressed: () {
+              List<GameDataModel> games = getGameData();
+              games.isEmpty
+                  ? Fluttertoast.showToast(
+                      msg: "No Game Registered",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: const Color.fromARGB(255, 41, 40, 40),
+                      textColor: Colors.white,
+                      fontSize: 16.0)
+                  : Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SelectGamePage(
+                            referenceDay: widget.referenceDay,
+                          )));
+            },
             child: const Padding(
               padding: EdgeInsets.all(15.0),
               child: Text(

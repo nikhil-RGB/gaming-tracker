@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/pages/LandingPage.dart';
 import 'package:gaming_tracker/testing/Tester.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,4 +52,16 @@ String convertDate(DateTime now) {
   String date = DateFormat('MMMM dd YYYY').format(now);
   Logger().w(date); // Example output: "July 03 2024"
   return date;
+}
+
+List<GameDataModel> getGameData() {
+  Directory games_dir = Directory("$main_dir_path/Games");
+  List<FileSystemEntity> files = games_dir.listSync();
+  List<GameDataModel> gameData = [];
+  for (FileSystemEntity entity in files) {
+    File ref = File(entity.path);
+    String data = ref.readAsStringSync();
+    gameData.add(GameDataModel.fromJson(jsonDecode(data)));
+  }
+  return gameData;
 }
