@@ -11,14 +11,22 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+// ignore: must_be_immutable
 class SelectGamePage extends StatefulWidget {
-  const SelectGamePage({super.key, required this.referenceDay});
+  SelectGamePage({super.key, required this.referenceDay});
   final DateTime referenceDay;
+  String selectedGame = "";
   @override
   State<SelectGamePage> createState() => _SelectGamePageState();
 }
 
 class _SelectGamePageState extends State<SelectGamePage> {
+  @override
+  void initState() {
+    widget.selectedGame = getGameData()[0].game_name;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,12 +112,24 @@ class _SelectGamePageState extends State<SelectGamePage> {
   Widget buildGameCard(GameDataModel gameData) {
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: (widget.selectedGame == gameData.game_name)
+              ? const Color(0xFFF23453)
+              : Colors.black,
+          width: 2.0,
+        ),
+      ),
       color: Colors.black,
       margin: const EdgeInsets.all(10.0),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          setState(() {
+            widget.selectedGame = gameData.game_name;
+          });
+        },
         child: Stack(
           children: [
             FadeInImage(
