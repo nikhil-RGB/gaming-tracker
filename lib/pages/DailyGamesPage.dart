@@ -46,27 +46,24 @@ class _DailyGamePageState extends State<DailyGamePage> {
                       _addGameButton(),
                     ],
                   )
-                : Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        dateCard(date: widget.referenceDay),
-                        const Text(
-                          "Today's Games",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.5,
-                          ),
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      dateCard(date: widget.referenceDay),
+                      const Text(
+                        "Today's Games",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
                         ),
-                        Gap(MediaQuery.of(context).size.height * 0.07),
-                        buildGameList(gamesPlayed),
-                        Gap(MediaQuery.of(context).size.height * 0.1),
-                        _addGameButton(),
-                      ],
-                    ),
+                      ),
+                      Gap(MediaQuery.of(context).size.height * 0.050),
+                      buildGameList(gamesPlayed),
+                      Gap(MediaQuery.of(context).size.height * 0.059),
+                      _addGameButton(),
+                    ],
                   ),
       ),
     ));
@@ -107,7 +104,7 @@ class _DailyGamePageState extends State<DailyGamePage> {
   //Builds a list view of the games played that day
   Widget buildGameList(DailyInfoList gamesPlayed) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.48,
+      height: MediaQuery.of(context).size.height * 0.522,
       child: Center(
         child: ListView.builder(
             itemCount: gamesPlayed.gamesPlayed.length,
@@ -125,51 +122,55 @@ class _DailyGamePageState extends State<DailyGamePage> {
       gname = gname + "..";
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 6.0),
+      padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 1.0),
       child: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 250,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      gname,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Gap(3),
-                    Text("${gameInfo.hours} hours played",
+          SizedBox(
+            height: 152,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 250,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        gname,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 12)),
-                  ],
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Gap(3),
+                      Text("${gameInfo.hours} hours played",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12)),
+                    ],
+                  ),
                 ),
-              ),
-              const Gap(16.0),
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                color: Colors.black,
-                // margin: const EdgeInsets.all(10.0),
-                clipBehavior: Clip.hardEdge,
-                child: FadeInImage(
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: FileImage(File(gameInfo.game.image_path)),
-                  fit: BoxFit.cover,
-                  height: 165,
-                  width: 140,
+                const Gap(16.0),
+                Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  color: Colors.black,
+                  // margin: const EdgeInsets.all(10.0),
+                  clipBehavior: Clip.hardEdge,
+                  child: FadeInImage(
+                    placeholder: MemoryImage(kTransparentImage),
+                    image: FileImage(File(gameInfo.game.image_path)),
+                    fit: BoxFit.cover,
+                    height: 110,
+                    width: 142,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const Divider(
-            height: 2.5,
+            height: 0.5,
             thickness: 3.0,
             color: Color(0xFF4D4C4C),
           )
