@@ -119,6 +119,11 @@ class _DailyGamePageState extends State<DailyGamePage> {
   }
 
   Widget buildGameCard(PlayInformation gameInfo) {
+    String gname = gameInfo.game.game_name;
+    if (gname.length > 13) {
+      gname = gname.substring(0, 11);
+      gname = gname + "..";
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 6.0),
       child: Column(
@@ -134,8 +139,9 @@ class _DailyGamePageState extends State<DailyGamePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      gameInfo.game.game_name,
+                      gname,
                       style: const TextStyle(color: Colors.white, fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const Gap(3),
                     Text("${gameInfo.hours} hours played",
