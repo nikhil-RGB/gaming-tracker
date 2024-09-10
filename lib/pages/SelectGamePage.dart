@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -39,16 +40,15 @@ class _SelectGamePageState extends State<SelectGamePage> {
                     letterSpacing: 0.5,
                   ),
                 ),
-                Gap(MediaQuery.of(context).size.height * 0.07),
+                Gap(MediaQuery.of(context).size.height * 0.062),
                 buildGameGrid(),
-                Gap(MediaQuery.of(context).size.height * 0.1),
-                nextButton(),
                 //next button here
               ],
             ),
           ),
         ),
       ),
+      floatingActionButton: buildNextButton(),
     );
   }
 
@@ -88,11 +88,11 @@ class _SelectGamePageState extends State<SelectGamePage> {
     List<GameDataModel> games = getGameData();
     return SingleChildScrollView(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.7,
         child: GridView.count(
           crossAxisCount: 2,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 3.0,
+          mainAxisSpacing: 3.0,
           children: games.map((e) {
             return buildGameCard(e);
           }).toList(),
@@ -165,45 +165,73 @@ class _SelectGamePageState extends State<SelectGamePage> {
     );
   }
 
-  Widget nextButton() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
+  FloatingActionButton buildNextButton() {
+    return FloatingActionButton(
+      backgroundColor: const Color(0xFFF23453),
+      onPressed: () {
+        List<GameDataModel> games = getGameData();
+        games.isEmpty
+            ? Fluttertoast.showToast(
+                msg: "No Game Registered",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: const Color.fromARGB(255, 41, 40, 40),
+                textColor: Colors.white,
+                fontSize: 16.0)
+            : Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => PerformancePage()));
+      },
+      child: const Padding(
+        padding: EdgeInsets.all(4.0),
+        child: Text(
+          "Next",
+          style: TextStyle(
+              color: Colors.white, fontSize: 9, fontWeight: FontWeight.w600),
         ),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0XFFF23453),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide.none,
-                    // border radius
-                    borderRadius: BorderRadius.circular(50))),
-            onPressed: () {
-              List<GameDataModel> games = getGameData();
-              games.isEmpty
-                  ? Fluttertoast.showToast(
-                      msg: "No Game Registered",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: const Color.fromARGB(255, 41, 40, 40),
-                      textColor: Colors.white,
-                      fontSize: 16.0)
-                  : Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PerformancePage()));
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                "Next",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 19,
-                    fontWeight: FontWeight.w600),
-              ),
-            )),
       ),
     );
   }
+
+  // Widget nextButton() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(50),
+  //       ),
+  //       child: ElevatedButton(
+  //           style: ElevatedButton.styleFrom(
+  //               backgroundColor: const Color(0XFFF23453),
+  //               shape: RoundedRectangleBorder(
+  //                   side: BorderSide.none,
+  //                   // border radius
+  //                   borderRadius: BorderRadius.circular(50))),
+  //           onPressed: () {
+  //             List<GameDataModel> games = getGameData();
+  //             games.isEmpty
+  //                 ? Fluttertoast.showToast(
+  //                     msg: "No Game Registered",
+  //                     toastLength: Toast.LENGTH_SHORT,
+  //                     gravity: ToastGravity.BOTTOM,
+  //                     timeInSecForIosWeb: 1,
+  //                     backgroundColor: const Color.fromARGB(255, 41, 40, 40),
+  //                     textColor: Colors.white,
+  //                     fontSize: 16.0)
+  //                 : Navigator.of(context).push(MaterialPageRoute(
+  //                     builder: (context) => PerformancePage()));
+  //           },
+  //           child: const Padding(
+  //             padding: EdgeInsets.all(15.0),
+  //             child: Text(
+  //               "Next",
+  //               style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 19,
+  //                   fontWeight: FontWeight.w600),
+  //             ),
+  //           )),
+  //     ),
+  //   );
+  // }
 }
