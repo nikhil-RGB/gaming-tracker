@@ -171,7 +171,7 @@ class _DailyGamePageState extends State<DailyGamePage> {
           ),
           const Divider(
             height: 0.5,
-            thickness: 3.0,
+            thickness: 0.8,
             color: Color(0xFF4D4C4C),
           )
         ],

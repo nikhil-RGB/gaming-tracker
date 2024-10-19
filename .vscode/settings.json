@@ -3,6 +3,7 @@
     "cmake.sourceDirectory": "C:/PROJECTS/personal/gaming_tracker/linux",
     "java.compile.nullAnalysis.mode": "automatic",
     "cSpell.words": [
+        "ejson",
         "Fluttertoast"
     ]
 }
