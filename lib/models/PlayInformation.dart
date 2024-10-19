@@ -26,6 +26,12 @@ class PlayInformation {
 
   // Connect the generated  function to the `toJson` method.
   Map<String, dynamic> toJson() => _$PlayInformationToJson(this);
+
+  factory PlayInformation.standard(GameDataModel game) => PlayInformation(
+      game: game,
+      hours: 0,
+      performance_mode: PowerMode.Performance,
+      fan_speed: FanSpeed.Auto);
 }
 
 enum PowerMode {

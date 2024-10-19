@@ -199,8 +199,12 @@ class _SelectGamePageState extends State<SelectGamePage> {
                 backgroundColor: const Color.fromARGB(255, 41, 40, 40),
                 textColor: Colors.white,
                 fontSize: 16.0)
-            : Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => PerformancePage()));
+            : Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PerformancePage(
+                      gameDataModel: GameDataModel.fromName(
+                        widget.selectedGame,
+                      ),
+                    )));
       },
       child: const Padding(
         padding: EdgeInsets.all(4.0),

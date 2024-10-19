@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:gaming_tracker/main.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logger/logger.dart';
 part 'GameDataModel.g.dart';
 
 @JsonSerializable()
@@ -17,4 +22,16 @@ class GameDataModel {
 
   // Connect the generated  function to the `toJson` method.
   Map<String, dynamic> toJson() => _$GameDataModelToJson(this);
+
+  //Capture the game data model from the name
+  static GameDataModel fromName(String name) {
+    String json_source = "";
+    try {
+      File f = File("$main_dir_path/Games/$name.txt");
+      json_source = f.readAsStringSync();
+    } catch (e) {
+      Logger().w(e.toString());
+    }
+    return GameDataModel.fromJson(jsonDecode(json_source));
+  }
 }

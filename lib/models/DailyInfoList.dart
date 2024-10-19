@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,13 +16,16 @@ class DailyInfoList {
   factory DailyInfoList.createEmpty(DateTime date) {
     return DailyInfoList(gamesPlayed: [], date: convertDate(date));
   }
-  //if no file for the referred date exists, the file will NOT be created, if it exists
+  //if no file for the referred date exists, the file WILL  be created, if it exists
   //a DailyInfoList object will be constructed from the JSON in the file
   factory DailyInfoList.fromDate(DateTime now) {
     String date = convertDate(now);
     File file = File("$main_dir_path/DailyInformation/$date.txt");
     if (!file.existsSync()) {
-      return DailyInfoList.createEmpty(now);
+      // file.createSync();
+      DailyInfoList obj = DailyInfoList.createEmpty(now);
+      file.writeAsStringSync(jsonEncode(obj.toJson()));
+      return obj;
     }
     //Otherwise read file and construct object from JSON
     String ejson = file.readAsStringSync();
@@ -36,7 +41,8 @@ class DailyInfoList {
     }
     // ignore: unnecessary_this
     String data = jsonEncode(this.toJson());
-    file.writeAsStringSync(data, flush: true); //consider removing flush:true
+    file.writeAsStringSync(data,
+        flush: true); //consider removing flush:true for performance reasons
   }
 
   //add toJson from JSON here.
