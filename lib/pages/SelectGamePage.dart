@@ -204,6 +204,7 @@ class _SelectGamePageState extends State<SelectGamePage> {
                       gameDataModel: GameDataModel.fromName(
                         widget.selectedGame,
                       ),
+                      dateTime: widget.referenceDay,
                     )));
       },
       child: const Padding(
