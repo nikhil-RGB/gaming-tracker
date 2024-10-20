@@ -51,4 +51,13 @@ class DailyInfoList {
 
   // Connect the generated  function to the `toJson` method.
   Map<String, dynamic> toJson() => _$DailyInfoListToJson(this);
+
+  void addGamingSession(PlayInformation pl) {
+    gamesPlayed.add(pl);
+  }
+
+  //Removes a particular game via it's index
+  void removeGamingSession(int index) {
+    gamesPlayed.removeAt(index);
+  }
 }
