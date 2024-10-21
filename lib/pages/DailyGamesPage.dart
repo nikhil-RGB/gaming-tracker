@@ -6,8 +6,8 @@ import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/DailyInfoList.dart';
 import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
-import 'package:gaming_tracker/pages/GamesPage.dart';
 import 'package:gaming_tracker/pages/SelectGamePage.dart';
+import 'package:gaming_tracker/pages/ShowPlayInfo.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -109,72 +109,82 @@ class _DailyGamePageState extends State<DailyGamePage> {
         child: ListView.builder(
             itemCount: gamesPlayed.gamesPlayed.length,
             itemBuilder: ((context, index) {
-              return buildGameCard(gamesPlayed.gamesPlayed[index]);
+              return buildGameCard(gamesPlayed.gamesPlayed[index], index);
             })),
       ),
     );
   }
 
-  Widget buildGameCard(PlayInformation gameInfo) {
+  Widget buildGameCard(PlayInformation gameInfo, int index) {
     String gname = gameInfo.game.game_name;
     if (gname.length > 13) {
       gname = gname.substring(0, 11);
       gname = gname + "..";
     }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 1.0),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 152,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 250,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        gname,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Gap(3),
-                      Text("${gameInfo.hours} hours played",
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ShowPlayInfo(
+                  gameInformation: gameInfo,
+                  index: index,
+                  date: widget.referenceDay,
+                )));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 1.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 152,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 250,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          gname,
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 12)),
-                    ],
+                              color: Colors.white, fontSize: 16),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Gap(3),
+                        Text("${gameInfo.hours} hours played",
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12)),
+                      ],
+                    ),
                   ),
-                ),
-                const Gap(16.0),
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  color: Colors.black,
-                  // margin: const EdgeInsets.all(10.0),
-                  clipBehavior: Clip.hardEdge,
-                  child: FadeInImage(
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: FileImage(File(gameInfo.game.image_path)),
-                    fit: BoxFit.cover,
-                    height: 110,
-                    width: 142,
+                  const Gap(16.0),
+                  Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    color: Colors.black,
+                    // margin: const EdgeInsets.all(10.0),
+                    clipBehavior: Clip.hardEdge,
+                    child: FadeInImage(
+                      placeholder: MemoryImage(kTransparentImage),
+                      image: FileImage(File(gameInfo.game.image_path)),
+                      fit: BoxFit.cover,
+                      height: 110,
+                      width: 142,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Divider(
-            height: 0.5,
-            thickness: 0.8,
-            color: Color(0xFF4D4C4C),
-          )
-        ],
+            const Divider(
+              height: 0.5,
+              thickness: 0.8,
+              color: Color(0xFF4D4C4C),
+            )
+          ],
+        ),
       ),
     );
   }
