@@ -1,37 +1,56 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gaming_tracker/models/DailyInfoList.dart';
-import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
+import 'package:gaming_tracker/pages/DailyGamesPage.dart';
 import 'package:gaming_tracker/pages/LandingPage.dart';
 import 'package:gap/gap.dart';
 
-class PerformancePage extends StatefulWidget {
-  PerformancePage(
-      {super.key, required this.gameDataModel, required this.dateTime});
-  GameDataModel gameDataModel;
-  late PlayInformation playinfo;
-  DateTime dateTime;
-  @override
-  State<PerformancePage> createState() => _PerformancePageState();
-}
-
-class _PerformancePageState extends State<PerformancePage> {
-  final TextEditingController _hours = TextEditingController();
-  final TextEditingController _CPU = TextEditingController(text: '0');
-  final TextEditingController _GPU = TextEditingController(text: '0');
-  // ignore: prefer_final_fields
-  List<bool> _selectedPerformance = List.generate(3, (index) => false)
-    ..[0] = true;
-
-  List<bool> _selectedFans = List.generate(3, (index) => false)..[0] = true;
+class ShowPlayInfo extends StatelessWidget {
+  const ShowPlayInfo(
+      {super.key,
+      required this.gameInformation,
+      required this.index,
+      required this.date});
+  final PlayInformation gameInformation;
+  final int index;
+  final DateTime date;
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          gameInformation.game.game_name,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back)),
+        actions: [
+          IconButton(
+            onPressed: () {
+              //Delete logic here
+              DailyInfoList obj = DailyInfoList.fromDate(date);
+              obj.removeGamingSession(index);
+              obj.updateInfo();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => DailyGamePage(
+                            referenceDay: date,
+                          )),
+                  (Route<dynamic> route) =>
+                      route is MaterialPageRoute &&
+                      route.builder(context) is LandingPage);
+            },
+            icon: const Icon(Icons.delete_forever),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
@@ -39,15 +58,6 @@ class _PerformancePageState extends State<PerformancePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Gap(20),
-              Text(
-                widget.gameDataModel.game_name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               const Gap(10),
               buildHoursField(),
               const Gap(6),
@@ -80,38 +90,6 @@ class _PerformancePageState extends State<PerformancePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_hours.text.isEmpty) {
-            Fluttertoast.showToast(
-              msg: "Please Enter hours played",
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.white,
-            );
-            return;
-          }
-          PlayInformation pl_info = PlayInformation(
-              game: widget.gameDataModel,
-              hours: double.parse(_hours.text),
-              performance_mode: readPowerMode(),
-              fan_speed: readFanMode(),
-              CPU_FAN: int.parse(_CPU.text),
-              GPU_FAN: int.parse(_GPU.text));
-          DailyInfoList obj = DailyInfoList.fromDate(widget.dateTime);
-          obj.addGamingSession(pl_info);
-          obj.updateInfo();
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => LandingPage()),
-              (Route<dynamic> route) => false);
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: Text(
-            "Save",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
     );
   }
 
@@ -131,19 +109,12 @@ class _PerformancePageState extends State<PerformancePage> {
             ),
           ),
           TextField(
+            readOnly: true,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) {
-              setState(() {});
-            },
-            inputFormatters: [
-              DecimalEnforcer(),
-            ],
-            controller: _hours,
+            controller:
+                TextEditingController(text: gameInformation.hours.toString()),
             maxLength: 40,
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              hintText: "Enter hours played here(decimal)",
-            ),
           ),
         ],
       ),
@@ -152,15 +123,27 @@ class _PerformancePageState extends State<PerformancePage> {
 
   //Performance buttons
   Widget performanceButtons() {
+    int index = 0;
+    switch (gameInformation.performance_mode) {
+      case PowerMode.Balanced:
+        index = 0;
+        break;
+      case PowerMode.Performance:
+        index = 1;
+        break;
+      case PowerMode.Turbo:
+        index = 2;
+        break;
+      default:
+        throw "Invalid Power state";
+    }
+    List<bool> _selectedPerformance = [false, false, false];
+    _selectedPerformance[index] = true;
     return ToggleButtons(
         isSelected: _selectedPerformance,
         fillColor: const Color(0xFFFC5555),
-        onPressed: (select_index) {
-          _selectedPerformance = [false, false, false];
-          setState(() {
-            _selectedPerformance[select_index] = true;
-          });
-        },
+        onPressed: (index) {},
+        splashColor: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         borderWidth: 3,
         selectedBorderColor: const Color(0xFFFC5555),
@@ -185,15 +168,27 @@ class _PerformancePageState extends State<PerformancePage> {
 
   //Performance buttons
   Widget fanButtons() {
+    int index = 0;
+    switch (gameInformation.fan_speed) {
+      case FanSpeed.Auto:
+        index = 0;
+        break;
+      case FanSpeed.Max:
+        index = 1;
+        break;
+      case FanSpeed.Custom:
+        index = 2;
+        break;
+      default:
+        throw "Invalid Fan Mode";
+    }
+    List<bool> _selectedFans = [false, false, false];
+    _selectedFans[index] = true;
     return ToggleButtons(
         isSelected: _selectedFans,
         fillColor: const Color(0xFFFC5555),
-        onPressed: (select_index) {
-          _selectedFans = [false, false, false];
-          setState(() {
-            _selectedFans[select_index] = true;
-          });
-        },
+        onPressed: (index) {},
+        splashColor: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         borderWidth: 3,
         selectedBorderColor: const Color(0xFFFC5555),
@@ -237,6 +232,7 @@ class _PerformancePageState extends State<PerformancePage> {
             width: 60,
             height: 30,
             child: TextField(
+              readOnly: true,
               textAlign: TextAlign.center,
               textAlignVertical: TextAlignVertical.center,
               decoration: const InputDecoration(
@@ -252,62 +248,15 @@ class _PerformancePageState extends State<PerformancePage> {
                   borderSide: BorderSide(width: 1.0, color: Color(0xFFFC5555)),
                 ),
               ),
-              controller: isCPU ? _CPU : _GPU,
+              controller: TextEditingController(
+                  text: isCPU
+                      ? gameInformation.CPU_FAN.toString()
+                      : gameInformation.GPU_FAN.toString()),
               style: const TextStyle(color: Colors.white),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
             ),
           )
         ],
       ),
     );
-  }
-
-  //Parse and read power mode from toggle buttons
-  PowerMode readPowerMode() {
-    int control = _selectedPerformance.indexOf(true);
-    switch (control) {
-      case 0:
-        return PowerMode.Balanced;
-      case 1:
-        return PowerMode.Performance;
-      case 2:
-        return PowerMode.Turbo;
-      default:
-        throw "Invalid Power State";
-    }
-  }
-
-  //Parse and read Fan mode from toggle buttons:
-  FanSpeed readFanMode() {
-    int control = _selectedFans.indexOf(true);
-    switch (control) {
-      case 0:
-        return FanSpeed.Auto;
-      case 1:
-        return FanSpeed.Max;
-      case 2:
-        return FanSpeed.Custom;
-      default:
-        throw "Invalid Fan State";
-    }
-  }
-}
-
-class DecimalEnforcer extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final newText = newValue.text;
-    // Allow only one period
-    if ('.'.allMatches(newText).length <= 1 &&
-        (!newText.contains(RegExp(r'[^0-9.]')))) {
-      return newValue;
-    }
-    return oldValue;
   }
 }
