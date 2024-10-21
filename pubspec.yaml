@@ -44,5 +44,7 @@ flutter:
 
   assets:
    - assets/images/
+   - assets/images/fan_modes/
+   - assets/images/power_modes/
 
 
