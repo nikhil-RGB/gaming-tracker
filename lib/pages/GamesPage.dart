@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ class _GamesPageState extends State<GamesPage> {
   Widget build(BuildContext context) {
     List<GameDataModel> games = getGameData();
     return Scaffold(
+      // ignore: prefer_is_empty
       body: (games.length == 0)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,18 +53,6 @@ class _GamesPageState extends State<GamesPage> {
     );
   }
 
-  List<GameDataModel> getGameData() {
-    Directory games_dir = Directory("$main_dir_path/Games");
-    List<FileSystemEntity> files = games_dir.listSync();
-    List<GameDataModel> gameData = [];
-    for (FileSystemEntity entity in files) {
-      File ref = File(entity.path);
-      String data = ref.readAsStringSync();
-      gameData.add(GameDataModel.fromJson(jsonDecode(data)));
-    }
-    return gameData;
-  }
-
   Widget buildGameCard(GameDataModel gameData) {
     return Card(
       elevation: 3,
@@ -93,8 +81,8 @@ class _GamesPageState extends State<GamesPage> {
                   size: 30,
                 ),
                 onPressed: () {
-                  File reference = File(
-                      main_dir_path + "/Games/" + gameData.game_name + ".txt");
+                  File reference =
+                      File("$main_dir_path/Games/${gameData.game_name}.txt");
                   reference
                       .deleteSync(); //throws a file system exception if it  fails.
                   setState(() {});
