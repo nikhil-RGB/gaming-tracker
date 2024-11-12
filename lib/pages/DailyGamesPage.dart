@@ -26,6 +26,28 @@ class _DailyGamePageState extends State<DailyGamePage> {
     DailyInfoList gamesPlayed = DailyInfoList.fromDate(widget.referenceDay);
     return SafeArea(
         child: Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: (gamesPlayed.gamesPlayed.isEmpty)
+          ? null
+          : AppBar(
+              scrolledUnderElevation: 0.0,
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              //This button will delete the entire day's game data
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        gamesPlayed.clear();
+                        gamesPlayed.updateInfo();
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.delete_forever_outlined,
+                      color: Colors.red,
+                    ))
+              ],
+            ),
       body: Center(
         child:
             //add ternary operator check here for games played.

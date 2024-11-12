@@ -60,4 +60,9 @@ class DailyInfoList {
   void removeGamingSession(int index) {
     gamesPlayed.removeAt(index);
   }
+
+  //Clear the game list
+  void clear() {
+    gamesPlayed.clear();
+  }
 }
