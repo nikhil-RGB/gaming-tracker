@@ -22,7 +22,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
     }).toList();
     return Scaffold(
       body: Center(
-        child: LineChartWidget(game_name: "All Games", hours: hours),
+        child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.55,
+            width: MediaQuery.of(context).size.width * 0.93,
+            child: LineChartWidget(game_name: "All Games", hours: hours)),
       ),
     );
   }
