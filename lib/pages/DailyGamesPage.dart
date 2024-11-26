@@ -40,6 +40,7 @@ class _DailyGamePageState extends State<DailyGamePage> {
                       setState(() {
                         gamesPlayed.clear();
                         gamesPlayed.updateInfo();
+                        // gamesPlayed.deleteFromDisk();
                       });
                     },
                     icon: const Icon(

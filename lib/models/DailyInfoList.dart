@@ -65,4 +65,50 @@ class DailyInfoList {
   void clear() {
     gamesPlayed.clear();
   }
+
+  void deleteFromDisk() {
+    File file = File("$main_dir_path/DailyInformation/$date.txt");
+    try {
+      // ignore: unnecessary_this
+      this.clear();
+      file.deleteSync();
+    } catch (e) {
+      //error handling pop-up here, keep in
+      //mind that even if the delete fails the data is still cleared.
+      //Low-priority, but consider adding a info pop up in case this catch block executes.
+    }
+  }
+
+  double totalHours() {
+    double total = 0;
+    for (PlayInformation pl in gamesPlayed) {
+      total += pl.hours;
+    }
+    return total;
+  }
+
+  //week range
+  static List<DateTime> weekRange(DateTime obj) {
+    return getDaysBetween(getMostRecentMonday(obj), getNearestSunday(obj));
+  }
+
+  static DateTime getMostRecentMonday(DateTime date) {
+    int difference = date.weekday - DateTime.monday;
+    return date.subtract(Duration(days: difference));
+  }
+
+  static DateTime getNearestSunday(DateTime date) {
+    int difference = DateTime.sunday - date.weekday;
+    return date.add(Duration(days: difference));
+  }
+
+  static List<DateTime> getDaysBetween(DateTime start, DateTime end) {
+    List<DateTime> days = [];
+    for (DateTime date = start;
+        date.isBefore(end) || date.isAtSameMomentAs(end);
+        date = date.add(const Duration(days: 1))) {
+      days.add(date);
+    }
+    return days;
+  }
 }
