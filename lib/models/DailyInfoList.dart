@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logger/logger.dart';
 part 'DailyInfoList.g.dart';
 
 @JsonSerializable()
@@ -85,6 +86,20 @@ class DailyInfoList {
       total += pl.hours;
     }
     return total;
+  }
+
+  double hoursFor(String name) {
+    if (name == "All Games") {
+      Logger().w("hoursFor() function used for All Games");
+      return totalHours();
+    }
+    double hoursPlayed = 0;
+    gamesPlayed.forEach((game) {
+      if (game.game.game_name == name) {
+        hoursPlayed += game.hours;
+      }
+    });
+    return hoursPlayed;
   }
 
   //week range

@@ -17,7 +17,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     //Current date to initialize the calendar
-    DateTime today = DateTime.now();
+    DateTime today = globalReferenceDay;
     List<DateTime?> _dates = [today];
     return Scaffold(
       backgroundColor: const Color(0xFF1E1E1E),
