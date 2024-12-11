@@ -259,7 +259,6 @@ class _AddGamePageState extends State<AddGamePage> {
     return File("${main_dir_path}/Games/${_name.text}.txt").existsSync();
   }
 
-  //TO-DO:Implement data persistence via hive boxes or Json Serialization
   void save() {
     GameDataModel model = GameDataModel(
         game_name: _name.text,
@@ -269,7 +268,7 @@ class _AddGamePageState extends State<AddGamePage> {
     File gamefile = File("${main_dir_path}/Games/${model.game_name}.txt");
     gamefile.createSync();
     gamefile.writeAsStringSync(data);
-    Logger().w("$data\n${model.game_name}");
+    // Logger().w("$data\n${model.game_name}");
 
     image = null;
   }

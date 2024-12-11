@@ -60,12 +60,12 @@ class _SelectGamePageState extends State<SelectGamePage> {
   }
 
   Widget dateCard({required DateTime date}) {
-    Logger logger = Logger();
+    // Logger logger = Logger();
     DateTime now = date;
     String dayMonth = DateFormat('MMMM dd').format(now);
-    logger.i(dayMonth); // Example output: "July 03"
+    // logger.i(dayMonth);  Example output: "July 03"
     int year = (now.year);
-    logger.i(year);
+    // logger.i(year);
     return SizedBox(
       height: 100,
       child: Column(

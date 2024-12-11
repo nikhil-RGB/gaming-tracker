@@ -30,7 +30,7 @@ class GameDataModel {
       File f = File("$main_dir_path/Games/$name.txt");
       json_source = f.readAsStringSync();
     } catch (e) {
-      Logger().w(e.toString());
+      // Logger().w(e.toString());
     }
     return GameDataModel.fromJson(jsonDecode(json_source));
   }

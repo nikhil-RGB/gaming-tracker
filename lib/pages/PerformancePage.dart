@@ -100,6 +100,17 @@ class _PerformancePageState extends State<PerformancePage> {
           DailyInfoList obj = DailyInfoList.fromDate(widget.dateTime);
           obj.addGamingSession(pl_info);
           obj.updateInfo();
+
+          //Add code to show Flutter toast
+          Fluttertoast.showToast(
+              msg: "Session Saved!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: const Color.fromARGB(255, 41, 40, 40),
+              textColor: Colors.white,
+              fontSize: 16.0);
+
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LandingPage()),
               (Route<dynamic> route) => false);

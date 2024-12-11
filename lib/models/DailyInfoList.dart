@@ -85,12 +85,15 @@ class DailyInfoList {
     for (PlayInformation pl in gamesPlayed) {
       total += pl.hours;
     }
+    if (total > 24) {
+      total = 24;
+    }
     return total;
   }
 
   double hoursFor(String name) {
     if (name == "All Games") {
-      Logger().w("hoursFor() function used for All Games");
+      //Logger().w("hoursFor() function used for All Games");
       return totalHours();
     }
     double hoursPlayed = 0;
@@ -99,6 +102,9 @@ class DailyInfoList {
         hoursPlayed += game.hours;
       }
     });
+    if (hoursPlayed > 24) {
+      hoursPlayed = 24;
+    }
     return hoursPlayed;
   }
 

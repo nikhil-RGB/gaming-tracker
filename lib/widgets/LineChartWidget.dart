@@ -27,49 +27,46 @@ class LineChartWidget extends StatefulWidget {
 class _LineChartWidgetState extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      clipBehavior: Clip.hardEdge,
-      child: LineChart(
-        LineChartData(
-            titlesData: LineTitles.getTitleData(),
-            minY: 0,
-            minX: 0,
-            maxX: LineChartWidget.MAX_X,
-            maxY: LineChartWidget.MAX_Y,
-            gridData: FlGridData(
+    return LineChart(
+      LineChartData(
+          titlesData: LineTitles.getTitleData(),
+          minY: 0,
+          minX: 0,
+          maxX: LineChartWidget.MAX_X,
+          maxY: LineChartWidget.MAX_Y,
+          gridData: FlGridData(
+            show: true,
+            getDrawingHorizontalLine: (value) {
+              return const FlLine(
+                color: const Color(0xff37434d),
+                strokeWidth: 1.0,
+              );
+            },
+            drawVerticalLine: true,
+            getDrawingVerticalLine: (value) {
+              return const FlLine(
+                color: const Color(0xff37434d),
+                strokeWidth: 1.0,
+              );
+            },
+          ),
+          borderData: FlBorderData(
               show: true,
-              getDrawingHorizontalLine: (value) {
-                return const FlLine(
-                  color: const Color(0xff37434d),
-                  strokeWidth: 1.0,
-                );
-              },
-              drawVerticalLine: true,
-              getDrawingVerticalLine: (value) {
-                return const FlLine(
-                  color: const Color(0xff37434d),
-                  strokeWidth: 1.0,
-                );
-              },
-            ),
-            borderData: FlBorderData(
+              border: Border.all(
+                color: const Color(0xFFF23453),
+                width: 1,
+              )),
+          lineBarsData: [
+            LineChartBarData(
+              spots: List.generate(LineChartWidget.MAX_X.toInt(),
+                  (index) => FlSpot((index).toDouble(), widget.hours[index])),
+              color: gradientColors[1],
+              belowBarData: BarAreaData(
                 show: true,
-                border: Border.all(
-                  color: const Color(0xFFF23453),
-                  width: 1,
-                )),
-            lineBarsData: [
-              LineChartBarData(
-                spots: List.generate(LineChartWidget.MAX_X.toInt(),
-                    (index) => FlSpot((index).toDouble(), widget.hours[index])),
-                color: gradientColors[1],
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: gradientColors[1].withOpacity(0.3),
-                ),
+                color: gradientColors[1].withOpacity(0.3),
               ),
-            ]),
-      ),
+            ),
+          ]),
     );
   }
 }

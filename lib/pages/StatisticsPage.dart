@@ -64,7 +64,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   String formatNumericDate(DateTime now) {
     String date = DateFormat('dd/MM/yyyy').format(now);
-    Logger().w(date); // Example output: "11-12-2024"
+    // Logger().w(date);  Example output: "11-12-2024"
     return date;
   }
 
