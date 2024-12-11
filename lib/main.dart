@@ -49,8 +49,8 @@ Future<String> get _localPath async {
 
 //Converts the date to the required format
 String convertDate(DateTime now) {
-  String date = DateFormat('MMMM dd YYYY').format(now);
-  Logger().w(date); // Example output: "July 03 2024"
+  String date = DateFormat('MMMM dd yyyy').format(now);
+
   return date;
 }
 

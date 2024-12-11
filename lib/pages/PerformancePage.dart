@@ -82,9 +82,9 @@ class _PerformancePageState extends State<PerformancePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_hours.text.isEmpty) {
+          if (_hours.text.isEmpty || double.parse(_hours.text) > 24) {
             Fluttertoast.showToast(
-              msg: "Please Enter hours played",
+              msg: "Invalid number of hours entered!",
               backgroundColor: Colors.redAccent,
               textColor: Colors.white,
             );
@@ -100,6 +100,17 @@ class _PerformancePageState extends State<PerformancePage> {
           DailyInfoList obj = DailyInfoList.fromDate(widget.dateTime);
           obj.addGamingSession(pl_info);
           obj.updateInfo();
+
+          //Add code to show Flutter toast
+          Fluttertoast.showToast(
+              msg: "Session Saved!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: const Color.fromARGB(255, 41, 40, 40),
+              textColor: Colors.white,
+              fontSize: 16.0);
+
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LandingPage()),
               (Route<dynamic> route) => false);
