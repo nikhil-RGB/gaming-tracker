@@ -1,4 +1,3 @@
-- Hours> 24 can be saved as the play data for a game in a single day, causes graph issues, fix. - !!!
+
 - Data saved before 11-12-2024 is now inaccessible due to incorrect date format while naming the files (Note, not issue)
 - no confirmation pop up when data is saved for play information for a game on a certain day(navigates back to calendar page from performance page after saving; no pop-up) -!
-- Don't allow a game to be saved with a pre-existing name or "All Games" String literal-!!!!!

@@ -82,9 +82,9 @@ class _PerformancePageState extends State<PerformancePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_hours.text.isEmpty) {
+          if (_hours.text.isEmpty || double.parse(_hours.text) > 24) {
             Fluttertoast.showToast(
-              msg: "Please Enter hours played",
+              msg: "Invalid number of hours entered!",
               backgroundColor: Colors.redAccent,
               textColor: Colors.white,
             );

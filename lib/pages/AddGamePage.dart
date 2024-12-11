@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/GameDataModel.dart';
+import 'package:gaming_tracker/pages/StatisticsPage.dart';
 import 'package:gap/gap.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,7 +54,7 @@ class _AddGamePageState extends State<AddGamePage> {
             ),
             buildNameField(),
             buildDescriptionField(),
-            Gap(10),
+            const Gap(10),
             buildImageContainer(),
             const Gap(5),
             _clickToLoad(),
@@ -106,9 +107,13 @@ class _AddGamePageState extends State<AddGamePage> {
             controller: _name,
             maxLength: 40,
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              hintText: "Enter Name here",
-            ),
+            decoration: InputDecoration(
+                hintText: "Enter Name here",
+                errorText: (gameExists())
+                    ? "Duplicate names are not allowed"
+                    : (_name.text == defaultGameSelection)
+                        ? "'All Games' is an invalid name"
+                        : null),
           ),
         ],
       ),
@@ -245,7 +250,13 @@ class _AddGamePageState extends State<AddGamePage> {
   bool isDataValid() {
     return !((_name.text.replaceAll(" ", "")).isEmpty ||
         _description.text.replaceAll(" ", "").isEmpty ||
-        image == null);
+        image == null ||
+        gameExists() ||
+        _name.text == defaultGameSelection);
+  }
+
+  bool gameExists() {
+    return File("${main_dir_path}/Games/${_name.text}.txt").existsSync();
   }
 
   //TO-DO:Implement data persistence via hive boxes or Json Serialization
