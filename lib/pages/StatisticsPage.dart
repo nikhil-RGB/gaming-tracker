@@ -117,14 +117,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: start,
+                    // initialDate: start,
                     firstDate: DateTime(2023),
                     lastDate: DateTime.now().add(const Duration(days: 1095)),
                   );
                   if (picked != null) {
                     setState(() {
                       _dateStart.text = DateFormat('dd/MM/yyyy').format(picked);
-                      start = picked;
+                      // start = picked;
                     });
                   }
                 },
@@ -157,14 +157,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: end,
+                    // initialDate: end,
                     firstDate: DateTime(2023),
                     lastDate: DateTime.now().add(const Duration(days: 1095)),
                   );
                   if (picked != null) {
                     setState(() {
                       _dateEnd.text = DateFormat('dd/MM/yyyy').format(picked);
-                      end = picked;
+                      // end = picked;
                     });
                   }
                 },
@@ -176,11 +176,45 @@ class _StatisticsPageState extends State<StatisticsPage> {
         const Gap(25),
         ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-            onPressed: () {},
+            onPressed: (_dateStart.text.isEmpty || _dateEnd.text.isEmpty)
+                ? null
+                : () {
+                    DateTime t1 = parseDate(_dateStart.text);
+                    DateTime t2 = parseDate(_dateEnd.text);
+                    Duration difference_dur = t2.difference(t1);
+                    int diff = difference_dur.inDays;
+                    if (diff <= 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid Date Range!'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    } else if (diff < 5) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Day range must be greater than 4'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    } else if (diff > 20) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Day range cannot be greater than 20'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    start = t1;
+                    end = t2;
+                  },
             child: const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Refresh Graph",
+                "Build/Refresh Graph",
                 style: TextStyle(color: Colors.white),
               ),
             ))
@@ -275,5 +309,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ),
       ],
     );
+  }
+
+  //parses a date in the format dd-mm-yyyy
+  DateTime parseDate(String input) {
+    List<String> tokens = input.split("/"); //[dd,mm,yyyy]
+    String toParse = "${tokens[2]}-${tokens[1]}-${tokens[0]}";
+    return DateTime.parse(toParse);
   }
 }
