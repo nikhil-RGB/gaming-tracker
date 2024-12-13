@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Tester().writeTestData();
+    // Tester().writeTestData();
     return MaterialApp(
       title: 'Gaming Tracker',
       theme: ThemeData(
