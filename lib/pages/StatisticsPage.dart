@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/DailyInfoList.dart';
 import 'package:gaming_tracker/pages/CalendarPage.dart';
+import 'package:gaming_tracker/widgets/CustomLineChart.dart';
+import 'package:gaming_tracker/widgets/CustomLinesTileData.dart';
 import 'package:gaming_tracker/widgets/LineChartWidget.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
@@ -72,6 +74,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ),
       );
     } else {
+      //CUSTOM SECTION
+      List<double> hours = [];
+      if (start != null && end != null) {
+        List<DateTime> days = DailyInfoList.getDaysBetween(start!, end!);
+        List<DailyInfoList> plinfos = days.map(
+          (now) {
+            return DailyInfoList.fromDate(now);
+          },
+        ).toList();
+        hours = plinfos.map((plinfo) {
+          if (initialGameValue == defaultGameSelection) {
+            return plinfo.totalHours();
+          } else {
+            return plinfo.hoursFor(initialGameValue);
+          }
+        }).toList();
+      }
+
       return SafeArea(
           child: Scaffold(
         body: Center(
@@ -81,6 +101,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
               toggleViews(),
               const Gap(25),
               datePickers(context),
+              const Gap(20),
+              (start != null && end != null)
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.40,
+                      width: MediaQuery.of(context).size.width * 0.93,
+                      child: CustomLineChart(hours: hours),
+                    )
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.40,
+                    ),
             ],
           ),
         ),
@@ -210,11 +240,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     }
                     start = t1;
                     end = t2;
+                    setState(() {
+                      CustomLineTiles.startDay = start!;
+                    });
                   },
             child: const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Build/Refresh Graph",
+                "Confirm Dates",
                 style: TextStyle(color: Colors.white),
               ),
             ))
