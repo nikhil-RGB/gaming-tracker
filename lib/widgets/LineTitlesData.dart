@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineTitles {
+  static int previousLabelValue = -1;
   static FlTitlesData getTitleData() => FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -9,6 +10,12 @@ class LineTitles {
             reservedSize: 35,
             getTitlesWidget: (value, meta) {
               Widget text;
+              int val = value.toInt();
+              if (previousLabelValue == val) {
+                return const SizedBox.shrink(); // Don't show title
+              } else {
+                previousLabelValue = val;
+              }
               switch (value.toInt()) {
                 case 0:
                   text = const Text(
