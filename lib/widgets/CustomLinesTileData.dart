@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomLineTiles {
   static late DateTime startDay;
+  static String previousCustomLabel = "";
   // static late DateTime endDay;
   static FlTitlesData getTitleData() => FlTitlesData(
         bottomTitles: AxisTitles(
@@ -16,7 +17,21 @@ class CustomLineTiles {
               DateTime result = startDay.add(Duration(days: daysAdd));
               day = result.day.toString();
 
-              Widget text = Text(day);
+              if (day == previousCustomLabel) {
+                return const SizedBox.shrink(); // Don't show title
+              } else {
+                previousCustomLabel =
+                    day; //Update previous label with currently displayed label
+              }
+
+              Widget text = Text(
+                day,
+                style: const TextStyle(
+                  color: Color(0xff67727d),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              );
 
               return SideTitleWidget(
                 axisSide: meta.axisSide,

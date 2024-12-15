@@ -17,6 +17,7 @@ class CustomLineChart extends StatefulWidget {
 class _CustomLineChartState extends State<CustomLineChart> {
   @override
   Widget build(BuildContext context) {
+    CustomLineTiles.previousCustomLabel = "";
     return LineChart(
       LineChartData(
           titlesData: CustomLineTiles.getTitleData(),

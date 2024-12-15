@@ -247,7 +247,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             child: const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Confirm Dates",
+                "Build/Refresh graph",
                 style: TextStyle(color: Colors.white),
               ),
             ))
