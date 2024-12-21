@@ -9,54 +9,91 @@ This app is designed to log and track your daily gaming habits, providing weekly
 > [!NOTE]  
 > This tracker app does not automatically log sessions, and stores all information on the phone's local file system.
 
-Before logging any information, users need to register the games they play in the "Games" section.
-Once the user has registered their games, they can proceed to select a day via the calendar page and proceeding to view existing sessions or logging new ones.
-The cards which display "hours played" alongside the game's name and image on the "Today's Games" page are clickable. Clicking a card reveals the power mode, fan mode and the CPU/GPU fan speed averaged during the session. 
+<br>
 
-The statistics section of the app can be used to view a weekly/fortnightly graph of your gaming data. This section has two views:
-- Standard view:
-  - X-Axis represents days(Monday-Sunday). The week range displayed is determined by the date selected in the calendar page- all days between the 
-    closest previous monday and the nearest next Sunday are displayed in the standard view.
-  - Y-Axis represents hours in the day(0-24).
-  - A dropdown is present which can be used to select which game's session data you wish to be dispalyed on the graph.
-  - If more than 24 hours have been logged on a particular day, it will be rounded down to 24 on the graph.
+## How to Use and Screenshots
 
-    <br> <br>
-    
-<img src="https://github.com/user-attachments/assets/9860ca28-1ecb-49f9-baf3-508a19d02410" alt="Image Description" width="220" height="500">
+<br>
+
+Before logging gaming sessions, any games the user plays and would like to save sessions of should be 'registered' manually.
+
+### Step 1: Register a Game
+
+<br>
+
+<img src="https://github.com/user-attachments/assets/bc45f95b-04d6-480e-b33f-59aa25779647" width=230>
 
 <br> <br>
 
-- Custom View:
-  - Date ranges can be inputted manually, must be greater than 4 days and lesser than 21 days.
-  - The game select drop down is present on this page as well, and shares it's state with the standard view game select drop-down.
-  - It is to noted that The standard view is the default view, and is the view which is displayed when navigating to the
-    stats page. Both the standard and custom view maintain their state when the stats tab is selected on
-    the landing page. However, if the user navigates to the calendar page or games page, the standard
-    view maintains it's state while the custom view gets reset.
+- Navigate to the 'Games' Page by clicking on the controller icon in the bottom navbar.
+- Click on the "Add" Floating action button to register a game.
+  
+<br>
 
- 
-<br> <br>
-    
-<img src="https://github.com/user-attachments/assets/53c06d0c-f447-4b5e-b0dd-d896e7f00163" alt="Image Description" width="220" height="500">
+<img src="https://github.com/user-attachments/assets/71ee1524-6672-466d-94e6-461cdb1c73a7" width=230>
 
-<br> <br>
+  <br>
+  <br>
 
-### Screenshots:
+- Fill in the name of the game, description and select an image for the game. Note that 'All Games' is an invalid name and duplicate game names are not allowed.
+- Once the details have been entered, click on "Save" to save the game.
+- Repeat this process for whichever games you wish to track.
+  
+  <br>
+  
+
+<img src="https://github.com/user-attachments/assets/29444a0f-a0a5-4645-95f8-5f160d906073" width=230>
+
+  <br><br>
+
+  ### Step 2: Logging/Viewing a Session
+
+  <br>
+
+  #### Logging sessions:
+
+  <br>
+
+  - Navigate to the 'Calendar' page by clicking on the calendar icon in the bottom navbar.
+  - This page provides an efficient way to select a particular date to log gaming sessions/view playtime data.
+  - Once a day has been selected, click on the floating action play button to view the games played on that day/log additional gaming sessions.
+
+    <br>
+
+<div align="center">
+  
+<img width="230" alt="calendar" align="left" src="https://github.com/user-attachments/assets/796850d6-1cdb-4bc6-a934-02b0201bfd0d">
+
+<img width="230" alt="empty-cat-image" align="center" src="https://github.com/user-attachments/assets/a4135256-2461-44e7-9318-017461bf4787">
+
+<img width="230" alt="logged-games" align="right" src="https://github.com/user-attachments/assets/bafe704e-eddb-4126-849b-7fedbc9e1a51">
+
+</div>
+
+<br><br>
+
+- Once the user chooses a game to log, they will be presented with the 'Performance' page, this allows users to enter the number of hours the game was played and also input:
+     - Power Modes selected : The user is presented with 3 options: Balanced, Performance and Turbo. This information is generally more applicable to gaming laptop users since performance control softwares geenrally allow the standard user to switch between these three or similar power modes to increase/throttle performance and consequently temperatures. More sophisticated logging of CPU PL1/PL2 power limits, GPU voltage curves, underclocking, overclocking, etc is unfortunately not available in this app.
+     -  Fan Modes : The user is presented with 3 options: Auto, Max and Custom. These refer to the default fan curve provided by the manafacturer, the maximum speed the CPU and GPU fans can spin at and a customized static fan speed for the CPU/GPU. Custom fan curves cannot be logged.
+     -  Average fan speed: The user can input the average fan speed on the CPU/GPU during the session, or in the case of the Custom fan mode- the actual static speeds.
+
+<br>
+
+<img src="https://github.com/user-attachments/assets/c8d12c81-1df3-4361-adf4-60d9d3e5d3a2" width=230>
 
 
-<img width="289" alt="SCREEN1" src="https://github.com/user-attachments/assets/969c2fa8-7393-4fa7-b9d0-552ab5b3eaa0" />
+<br><br>
 
-<img width="275" alt="RESGITERED_GAMES-PAGE" src="https://github.com/user-attachments/assets/9370bb95-80ba-4038-8d15-99b4d7f73357" />
-
-
-
-<img width="284" alt="SCREEN2" src="https://github.com/user-attachments/assets/204aac99-1183-4a98-9b37-48bdaf53a7ac" />
-<img width="284" alt="screen3" src="https://github.com/user-attachments/assets/e8d74ecc-8290-4a54-8e3f-9eb784b52aae" />
+#### Viewing Sessions:
 
 
-<img width="278" alt="SCREEN4" src="https://github.com/user-attachments/assets/f0377300-4f06-4ff9-b3f0-81a7636d0792" />
-<img width="292" alt="STATS_PAGE" src="https://github.com/user-attachments/assets/ca9716c4-6631-4732-9fc1-de01d3f539d8" />
+
+
+
+  
+
+
+
 
 
 
