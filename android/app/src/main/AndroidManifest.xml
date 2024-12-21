@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="gaming_tracker"
+        android:label="Gaming Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
