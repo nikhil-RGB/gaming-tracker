@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:gaming_tracker/main.dart';
+import 'package:gaming_tracker/models/Preference.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logger/logger.dart';
 part 'GameDataModel.g.dart';
@@ -11,10 +12,13 @@ class GameDataModel {
   String game_name;
   String description;
   String image_path;
-  GameDataModel(
-      {required this.game_name,
-      required this.description,
-      required this.image_path});
+  Preference settings;
+  GameDataModel({
+    required this.game_name,
+    required this.description,
+    required this.image_path,
+    required this.settings,
+  });
   // Connect the generated function to the `fromJson`
   // factory.
   factory GameDataModel.fromJson(Map<String, dynamic> json) =>

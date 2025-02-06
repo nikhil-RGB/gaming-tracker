@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/GameDataModel.dart';
+import 'package:gaming_tracker/models/PlayInformation.dart';
+import 'package:gaming_tracker/models/Preference.dart';
 import 'package:gaming_tracker/pages/StatisticsPage.dart';
 import 'package:gap/gap.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,6 +23,14 @@ class AddGamePage extends StatefulWidget {
 class _AddGamePageState extends State<AddGamePage> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _description = TextEditingController();
+  final TextEditingController _CPU = TextEditingController(text: '0');
+  final TextEditingController _GPU = TextEditingController(text: '0');
+  late Preference settings;
+  // ignore: prefer_final_fields
+  List<bool> _selectedPerformance = List.generate(3, (index) => false)
+    ..[0] = true;
+
+  List<bool> _selectedFans = List.generate(3, (index) => false)..[0] = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,11 +69,61 @@ class _AddGamePageState extends State<AddGamePage> {
             buildImageContainer(),
             const Gap(5),
             _clickToLoad(),
-            const Gap(5),
+
+            //Performance widgets start
+            const Gap(20),
+            preferences(),
+            const Gap(10),
+            //Performance Widgets end
+
             buildSubmitButton(),
           ],
         ),
       ),
+    );
+  }
+
+  //Widget for fan and power preferences
+  Widget preferences() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Preferred Fan/Power Settings",
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Gap(13),
+        const Text(
+          "Select Power Mode",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Gap(10),
+        performanceButtons(),
+        const Gap(13),
+        const Text(
+          "Select Fan Mode",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Gap(10),
+        fanButtons(),
+        const Gap(40),
+        manualFanEntry(0),
+        const Gap(9),
+        manualFanEntry(1),
+      ],
     );
   }
 
@@ -165,7 +226,7 @@ class _AddGamePageState extends State<AddGamePage> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 57, 54, 54),
+            color: const Color.fromARGB(255, 57, 54, 54),
             border: Border.all(
               color: Colors.redAccent,
               width: 3.0,
@@ -260,10 +321,19 @@ class _AddGamePageState extends State<AddGamePage> {
   }
 
   void save() {
+    //Edit game data model to allow for preferences object
+    Preference obj = Preference(
+      CPU_FAN: int.parse(_CPU.text),
+      GPU_FAN: int.parse(_GPU.text),
+      fans: readFanMode(),
+      pwr: readPowerMode(),
+    ); //initialize preferences with selected options
     GameDataModel model = GameDataModel(
-        game_name: _name.text,
-        description: _description.text,
-        image_path: image!.path);
+      game_name: _name.text,
+      description: _description.text,
+      image_path: image!.path,
+      settings: obj,
+    );
     String data = jsonEncode(model.toJson());
     File gamefile = File("${main_dir_path}/Games/${model.game_name}.txt");
     gamefile.createSync();
@@ -299,6 +369,150 @@ class _AddGamePageState extends State<AddGamePage> {
           backgroundColor: const Color.fromARGB(255, 41, 40, 40),
           textColor: Colors.white,
           fontSize: 16.0);
+    }
+  }
+
+  Widget fanButtons() {
+    return ToggleButtons(
+        isSelected: _selectedFans,
+        fillColor: const Color(0xFFFC5555),
+        onPressed: (select_index) {
+          _selectedFans = [false, false, false];
+          setState(() {
+            _selectedFans[select_index] = true;
+          });
+        },
+        borderRadius: BorderRadius.circular(12),
+        borderWidth: 3,
+        selectedBorderColor: const Color(0xFFFC5555),
+        children: [
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/fan_modes/auto_fans.png"),
+          ),
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/fan_modes/max_fans.png"),
+          ),
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/fan_modes/custom_fans.png"),
+          ),
+        ]);
+  }
+
+  //Performance buttons
+  Widget performanceButtons() {
+    return ToggleButtons(
+        isSelected: _selectedPerformance,
+        fillColor: const Color(0xFFFC5555),
+        onPressed: (select_index) {
+          _selectedPerformance = [false, false, false];
+          setState(() {
+            _selectedPerformance[select_index] = true;
+          });
+        },
+        borderRadius: BorderRadius.circular(12),
+        borderWidth: 3,
+        selectedBorderColor: const Color(0xFFFC5555),
+        children: [
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/power_modes/balanced.png"),
+          ),
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/power_modes/performance.png"),
+          ),
+          SizedBox(
+            height: 90,
+            width: 105,
+            child: Image.asset("assets/images/power_modes/turbo.png"),
+          ),
+        ]);
+  }
+
+  Widget manualFanEntry(int control) {
+    bool isCPU = control == 0;
+    return Center(
+      child: Row(
+        //start here
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            isCPU ? "Avg CPU Fan Speed: " : "Avg GPU Fan Speed: ",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Gap(5),
+          SizedBox(
+            width: 60,
+            height: 30,
+            child: TextField(
+              textAlign: TextAlign.center,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 5.0,
+                  horizontal: 5.0,
+                ),
+                isDense: true,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1.0, color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1.0, color: Color(0xFFFC5555)),
+                ),
+              ),
+              controller: isCPU ? _CPU : _GPU,
+              style: const TextStyle(color: Colors.white),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //Parse and read power mode from toggle buttons
+  PowerMode readPowerMode() {
+    int control = _selectedPerformance.indexOf(true);
+    switch (control) {
+      case 0:
+        return PowerMode.Balanced;
+      case 1:
+        return PowerMode.Performance;
+      case 2:
+        return PowerMode.Turbo;
+      default:
+        throw "Invalid Power State";
+    }
+  }
+
+  //Parse and read Fan mode from toggle buttons:
+  FanSpeed readFanMode() {
+    int control = _selectedFans.indexOf(true);
+    switch (control) {
+      case 0:
+        return FanSpeed.Auto;
+      case 1:
+        return FanSpeed.Max;
+      case 2:
+        return FanSpeed.Custom;
+      default:
+        throw "Invalid Fan State";
     }
   }
 }

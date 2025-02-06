@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gaming_tracker/models/DailyInfoList.dart';
 import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
+import 'package:gaming_tracker/models/Preference.dart';
 import 'package:gaming_tracker/pages/LandingPage.dart';
 import 'package:gap/gap.dart';
 
@@ -21,13 +22,22 @@ class PerformancePage extends StatefulWidget {
 
 class _PerformancePageState extends State<PerformancePage> {
   final TextEditingController _hours = TextEditingController();
-  final TextEditingController _CPU = TextEditingController(text: '0');
-  final TextEditingController _GPU = TextEditingController(text: '0');
+  late TextEditingController _CPU;
+  late TextEditingController _GPU;
   // ignore: prefer_final_fields
-  List<bool> _selectedPerformance = List.generate(3, (index) => false)
-    ..[0] = true;
+  late List<bool> _selectedPerformance;
 
-  List<bool> _selectedFans = List.generate(3, (index) => false)..[0] = true;
+  late List<bool> _selectedFans;
+  @override
+  void initState() {
+    Preference prefs = widget.gameDataModel.settings;
+    _CPU = TextEditingController(text: prefs.CPU_FAN.toString());
+    _GPU = TextEditingController(text: prefs.GPU_FAN.toString());
+    _selectedPerformance = prefs.powerList();
+    _selectedFans = prefs.fanList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
@@ -194,7 +204,7 @@ class _PerformancePageState extends State<PerformancePage> {
         ]);
   }
 
-  //Performance buttons
+  //Fan buttons
   Widget fanButtons() {
     return ToggleButtons(
         isSelected: _selectedFans,
