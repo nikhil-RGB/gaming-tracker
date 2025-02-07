@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+//make text changes on this page and add info button
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaming_tracker/main.dart';
@@ -70,10 +70,10 @@ class _EditGamePageState extends State<EditGamePage> {
               child: Row(
                 children: [
                   const Text(
-                    "New Game",
+                    "Edit Game",
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                  const Gap(200),
+                  const Gap(180),
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -156,15 +156,34 @@ class _EditGamePageState extends State<EditGamePage> {
       onTap: () {
         setState(() {});
       },
-      child: const Center(
+      child: Center(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text(
-            "Click here to load selected image",
-            style: TextStyle(fontSize: 14, color: Colors.blue),
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Click here to load selected image",
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              const Gap(6),
+              infoButton(),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget infoButton() {
+    return IconButton(
+      onPressed: () async {
+        await openInfoDialog(
+            details:
+                "Updating the game's image will not change the preview image for sessions saved in the past!",
+            context: context);
+      },
+      icon: const Icon(Icons.info, color: Colors.blueAccent),
     );
   }
 
@@ -314,7 +333,7 @@ class _EditGamePageState extends State<EditGamePage> {
             padding: EdgeInsets.all(12.0),
             child: Center(
               child: Text(
-                "Add",
+                "Save Changes",
                 style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
@@ -524,4 +543,38 @@ class _EditGamePageState extends State<EditGamePage> {
         throw "Invalid Fan State";
     }
   }
+
+  Future openInfoDialog(
+          {String? title,
+          required String details,
+          required BuildContext context}) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            title: Text(
+              title ?? "Info:",
+              style: const TextStyle(color: Colors.black),
+            ),
+            content: Text(
+              details,
+              style: const TextStyle(color: Colors.black),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+            backgroundColor: Colors.redAccent,
+          );
+        },
+      );
 }
