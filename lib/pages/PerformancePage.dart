@@ -22,8 +22,8 @@ class PerformancePage extends StatefulWidget {
 
 class _PerformancePageState extends State<PerformancePage> {
   final TextEditingController _hours = TextEditingController();
-  late TextEditingController _CPU;
-  late TextEditingController _GPU;
+  late final TextEditingController _CPU;
+  late final TextEditingController _GPU;
   // ignore: prefer_final_fields
   late List<bool> _selectedPerformance;
 

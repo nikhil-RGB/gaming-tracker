@@ -3,7 +3,7 @@ import 'package:gaming_tracker/pages/CalendarPage.dart';
 import 'package:gaming_tracker/pages/GamesPage.dart';
 import 'package:gaming_tracker/pages/StatisticsPage.dart';
 
-int _currentPage = 0;
+int currentPage = 0;
 List<Widget> _screens = [
   CalendarPage(),
   GamesPage(),
@@ -20,7 +20,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: _screens[_currentPage],
+        body: _screens[currentPage],
         bottomNavigationBar: Theme(
           data: ThemeData(
             splashColor: Colors.transparent,
@@ -28,10 +28,10 @@ class _LandingPageState extends State<LandingPage> {
           child: BottomNavigationBar(
             onTap: (index) {
               setState(() {
-                _currentPage = index;
+                currentPage = index;
               });
             },
-            currentIndex: _currentPage,
+            currentIndex: currentPage,
             backgroundColor: const Color(0xFF101010),
             unselectedItemColor: Colors.white,
             selectedItemColor: Colors.redAccent,
