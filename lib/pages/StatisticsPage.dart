@@ -45,30 +45,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
       return SafeArea(
         child: Scaffold(
           body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                toggleViews(),
-                const Gap(25),
-                Text(
-                  "Selected day: ${convertDate(globalReferenceDay)}",
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                const Gap(15),
-                selectGameDropdown(),
-                const Gap(18),
-                Text(
-                  "${formatNumericDate(DailyInfoList.getMostRecentMonday(globalReferenceDay))} - ${formatNumericDate(DailyInfoList.getNearestSunday(globalReferenceDay))}",
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                const Gap(12),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.55,
-                  width: MediaQuery.of(context).size.width * 0.93,
-                  child: LineChartWidget(
-                      game_name: initialGameValue, hours: hours),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  toggleViews(),
+                  const Gap(25),
+                  Text(
+                    "Selected day: ${convertDate(globalReferenceDay)}",
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  const Gap(15),
+                  selectGameDropdown(),
+                  const Gap(18),
+                  Text(
+                    "${formatNumericDate(DailyInfoList.getMostRecentMonday(globalReferenceDay))} - ${formatNumericDate(DailyInfoList.getNearestSunday(globalReferenceDay))}",
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  const Gap(12),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    width: MediaQuery.of(context).size.width * 0.93,
+                    child: LineChartWidget(
+                        game_name: initialGameValue, hours: hours),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -95,23 +97,25 @@ class _StatisticsPageState extends State<StatisticsPage> {
       return SafeArea(
           child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              toggleViews(),
-              const Gap(25),
-              datePickers(context),
-              const Gap(20),
-              (start != null && end != null)
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.40,
-                      width: MediaQuery.of(context).size.width * 0.93,
-                      child: CustomLineChart(hours: hours),
-                    )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.40,
-                    ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                toggleViews(),
+                const Gap(25),
+                datePickers(context),
+                const Gap(20),
+                (start != null && end != null)
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.40,
+                        width: MediaQuery.of(context).size.width * 0.93,
+                        child: CustomLineChart(hours: hours),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.40,
+                      ),
+              ],
+            ),
           ),
         ),
       ));
