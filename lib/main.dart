@@ -14,6 +14,9 @@ late String main_dir_path;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   main_dir_path = await _localPath;
+  //The line below is used for cleaning previous data, allowing for clean reinstalls of the app
+  //whenever the underlying models(eg:GameDataModel) are changed. Keep it commented during the final build/standard testing
+  // Directory("${main_dir_path}/Games").deleteSync(recursive: true);
   Directory("${main_dir_path}/Games").createSync();
   Directory("${main_dir_path}/DailyInformation").createSync();
   runApp(const MyApp());

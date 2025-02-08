@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:gaming_tracker/pages/EditGamePage.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gaming_tracker/main.dart';
@@ -61,7 +62,10 @@ class _GamesPageState extends State<GamesPage> {
       margin: const EdgeInsets.all(10.0),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EditGamePage(reference: gameData)));
+        },
         child: Stack(
           children: [
             FadeInImage(

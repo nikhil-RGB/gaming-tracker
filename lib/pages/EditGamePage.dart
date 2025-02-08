@@ -1,36 +1,58 @@
 import 'dart:convert';
 import 'dart:io';
-
+//make text changes on this page and add info button
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaming_tracker/main.dart';
 import 'package:gaming_tracker/models/GameDataModel.dart';
 import 'package:gaming_tracker/models/PlayInformation.dart';
 import 'package:gaming_tracker/models/Preference.dart';
+import 'package:gaming_tracker/pages/GamesPage.dart';
+import 'package:gaming_tracker/pages/LandingPage.dart';
 import 'package:gaming_tracker/pages/StatisticsPage.dart';
 import 'package:gap/gap.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
-XFile? image;
-
-class AddGamePage extends StatefulWidget {
+class EditGamePage extends StatefulWidget {
+  GameDataModel reference; //required game data model reference for current game
+  EditGamePage({
+    super.key,
+    required this.reference,
+  });
   @override
-  State<AddGamePage> createState() => _AddGamePageState();
+  State<EditGamePage> createState() => _EditGamePageState();
 }
 
-class _AddGamePageState extends State<AddGamePage> {
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _description = TextEditingController();
-  final TextEditingController _CPU = TextEditingController(text: '0');
-  final TextEditingController _GPU = TextEditingController(text: '0');
+class _EditGamePageState extends State<EditGamePage> {
+  late final TextEditingController _name;
+  late final TextEditingController _description;
+  late final TextEditingController _CPU;
+  late final TextEditingController _GPU;
+  XFile? image;
   late Preference settings;
   // ignore: prefer_final_fields
-  List<bool> _selectedPerformance = List.generate(3, (index) => false)
-    ..[0] = true;
+  late List<bool> _selectedPerformance;
 
-  List<bool> _selectedFans = List.generate(3, (index) => false)..[0] = true;
+  late List<bool> _selectedFans;
+
+  @override
+  void initState() {
+    GameDataModel ref = widget.reference;
+    // ignore: unnecessary_this
+    this.settings = ref.settings;
+    // ignore: unnecessary_this
+    this.image = XFile(ref.image_path);
+    _name = TextEditingController(text: ref.game_name);
+    _description = TextEditingController(text: ref.description);
+    _CPU = TextEditingController(text: settings.CPU_FAN.toString());
+    _GPU = TextEditingController(text: settings.GPU_FAN.toString());
+    _selectedPerformance = settings.powerList();
+    _selectedFans = settings.fanList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +70,10 @@ class _AddGamePageState extends State<AddGamePage> {
               child: Row(
                 children: [
                   const Text(
-                    "New Game",
+                    "Edit Game",
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                  const Gap(200),
+                  const Gap(180),
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -134,19 +156,38 @@ class _AddGamePageState extends State<AddGamePage> {
       onTap: () {
         setState(() {});
       },
-      child: const Center(
+      child: Center(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text(
-            "Click here to load selected image",
-            style: TextStyle(fontSize: 14, color: Colors.blue),
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Click here to load selected image",
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              const Gap(6),
+              infoButton(),
+            ],
           ),
         ),
       ),
     );
   }
 
-  //builds the name field
+  Widget infoButton() {
+    return IconButton(
+      onPressed: () async {
+        await openInfoDialog(
+            details:
+                "Updating the game's image will not change the preview image for sessions saved in the past!",
+            context: context);
+      },
+      icon: const Icon(Icons.info, color: Colors.blueAccent),
+    );
+  }
+
+  //builds the name field- this field is not editable
   Widget buildNameField() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -162,19 +203,11 @@ class _AddGamePageState extends State<AddGamePage> {
             ),
           ),
           TextField(
-            onChanged: (value) {
-              setState(() {});
-            },
+            readOnly: true,
             controller: _name,
             maxLength: 40,
             style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-                hintText: "Enter Name here",
-                errorText: (gameExists())
-                    ? "Duplicate names are not allowed"
-                    : (_name.text == defaultGameSelection)
-                        ? "'All Games' is an invalid name"
-                        : null),
+            //name is not editable
           ),
         ],
       ),
@@ -282,21 +315,25 @@ class _AddGamePageState extends State<AddGamePage> {
               ? () {
                   save();
                   Fluttertoast.showToast(
-                      msg: "Entry Saved!",
+                      msg: "Edit Saved!",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.BOTTOM,
                       timeInSecForIosWeb: 1,
                       backgroundColor: Color.fromARGB(255, 41, 40, 40),
                       textColor: Colors.white,
                       fontSize: 16.0);
-                  Navigator.of(context).pop();
+                  currentPage = 1;
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LandingPage()),
+                  );
                 }
               : null,
           child: const Padding(
             padding: EdgeInsets.all(12.0),
             child: Center(
               child: Text(
-                "Add",
+                "Save Changes",
                 style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
@@ -309,15 +346,7 @@ class _AddGamePageState extends State<AddGamePage> {
 
   //Checks whether the inputted data is valid or not
   bool isDataValid() {
-    return !((_name.text.replaceAll(" ", "")).isEmpty ||
-        _description.text.replaceAll(" ", "").isEmpty ||
-        image == null ||
-        gameExists() ||
-        _name.text == defaultGameSelection);
-  }
-
-  bool gameExists() {
-    return File("${main_dir_path}/Games/${_name.text}.txt").existsSync();
+    return !(_description.text.replaceAll(" ", "").isEmpty || image == null);
   }
 
   void save() {
@@ -339,7 +368,6 @@ class _AddGamePageState extends State<AddGamePage> {
     gamefile.createSync();
     gamefile.writeAsStringSync(data);
     // Logger().w("$data\n${model.game_name}");
-
     image = null;
   }
 
@@ -515,4 +543,38 @@ class _AddGamePageState extends State<AddGamePage> {
         throw "Invalid Fan State";
     }
   }
+
+  Future openInfoDialog(
+          {String? title,
+          required String details,
+          required BuildContext context}) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            title: Text(
+              title ?? "Info:",
+              style: const TextStyle(color: Colors.black),
+            ),
+            content: Text(
+              details,
+              style: const TextStyle(color: Colors.black),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+            backgroundColor: Colors.redAccent,
+          );
+        },
+      );
 }

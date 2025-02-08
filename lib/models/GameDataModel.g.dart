@@ -11,6 +11,7 @@ GameDataModel _$GameDataModelFromJson(Map<String, dynamic> json) =>
       game_name: json['game_name'] as String,
       description: json['description'] as String,
       image_path: json['image_path'] as String,
+      settings: Preference.fromJson(json['settings'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GameDataModelToJson(GameDataModel instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$GameDataModelToJson(GameDataModel instance) =>
       'game_name': instance.game_name,
       'description': instance.description,
       'image_path': instance.image_path,
+      'settings': instance.settings,
     };
