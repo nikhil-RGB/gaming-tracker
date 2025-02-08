@@ -22,7 +22,8 @@ Before logging gaming sessions, any games the user plays and would like to save 
 
 <br>
 
-<img src="https://github.com/user-attachments/assets/bc45f95b-04d6-480e-b33f-59aa25779647" width=230>
+<img src="https://github.com/user-attachments/assets/f0163811-40ce-44aa-affc-d30af2660f1c" width=230>
+
 
 <br> <br>
 
@@ -31,20 +32,24 @@ Before logging gaming sessions, any games the user plays and would like to save 
   
 <br>
 
-<img src="https://github.com/user-attachments/assets/71ee1524-6672-466d-94e6-461cdb1c73a7" width=230>
+<img src="https://github.com/user-attachments/assets/7a5b7e99-ebc2-4b97-abcb-af8af3e75a51" width=230>
+
+
 
   <br>
   <br>
 
 - Fill in the name of the game, it's description and  then select an image for the game. Note that 'All Games' is an invalid name and duplicate game names are not allowed.
+- The latest release of the app also allows for saving preferred power and fan settings for a game while registering it. The values entered for power and fan settings on the 'Add Game' page are the options selected/displayed by default on the 'Performance' page when logging a session of the game.
 - Once the details have been entered, click on "Save" to save the game.
 - Games can be deleted via the delete icon on the top-right of it's tile in the 'Games' page. This does not affect existing data associated with it, but new data can no longer be logged for the game.
-- Repeat this process for whichever games you wish to track.
+- Repeat this process for whichever games you wish to track. If you wish to change the details or preferred settings of a game, simply tap the Game's card to navigate to the 'Edit Game' page, which is nearly identical to the 'Add Game' page. Note that a game's name can never be edited and changing a game's image does not retroactively change the preview image for sessions saved prior to the change.
   
   <br>
-  
 
-<img src="https://github.com/user-attachments/assets/29444a0f-a0a5-4645-95f8-5f160d906073" width=230>
+
+
+<img src="https://github.com/user-attachments/assets/9261279f-3b7e-4bc9-a8c1-08c3a0cc4130" width=230>
 
   <br><br>
 
@@ -81,6 +86,10 @@ Before logging gaming sessions, any games the user plays and would like to save 
      -  Fan Modes : The user is presented with 3 options: Auto, Max and Custom. These refer to the default fan curve provided by the manafacturer, the maximum speed the CPU and GPU fans can spin at and a customized static fan speed for the CPU/GPU respectively. Custom fan curves cannot be logged.
      -  Average fan speed: The user can input the average fan speed on the CPU/GPU during the session, or in the case of the Custom fan mode- the actual static speeds.
      -  After saving the session, the user will be navigated back to the 'Calendar' page.
+
+> [!NOTE]
+> To save time, the values selected and displayed by default on the 'Performance' page are those that were entered as Preferred settings for 
+> the game during it's creation. These can be changed  for the session being logged before saving it if the user so wishes.
 
 <br>
 
